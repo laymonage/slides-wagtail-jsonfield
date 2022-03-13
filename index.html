@@ -2,42 +2,612 @@
 <html>
 
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-	<title>reveal.js</title>
+  <title>Bringing JSONField into Wagtail Core</title>
 
-	<link rel="stylesheet" href="dist/reset.css">
-	<link rel="stylesheet" href="dist/reveal.css">
-	<link rel="stylesheet" href="dist/theme/sage.css">
+  <link rel="stylesheet" href="dist/reset.css">
+  <link rel="stylesheet" href="dist/reveal.css">
+  <link rel="stylesheet" href="dist/theme/sage.css">
 
-	<!-- Theme used for syntax highlighted code -->
-	<link rel="stylesheet" href="plugin/highlight/night-owl.css">
+  <!-- Theme used for syntax highlighted code -->
+  <link rel="stylesheet" href="plugin/highlight/night-owl.css">
 </head>
 
 <body>
-	<div class="reveal">
-		<div class="slides">
-			<section>Slide 1</section>
-			<section>Slide 2</section>
-		</div>
-	</div>
+  <div class="reveal">
+    <div class="slides">
+      <section data-markdown>
+        <textarea data-template>
+        ## Bringing
 
-	<script src="dist/reveal.js"></script>
-	<script src="plugin/notes/notes.js"></script>
-	<script src="plugin/markdown/markdown.js"></script>
-	<script src="plugin/highlight/highlight.js"></script>
-	<script>
-		// More info about initialization & config:
-		// - https://revealjs.com/initialization/
-		// - https://revealjs.com/config/
-		Reveal.initialize({
-			hash: true,
+        ## **`JSONField`**
 
-			// Learn about plugins: https://revealjs.com/plugins/
-			plugins: [RevealMarkdown, RevealHighlight, RevealNotes]
-		});
-	</script>
+        ## into Wagtail Core
+      </textarea>
+      </section>
+      <section>
+        <section data-auto-animate data-background-opacity="0.15">
+          <pre><code data-line-numbers="1-13|2|3|4-11|12" data-trim>
+          {
+            "name": "Sage Abdullah",
+            "background": "Wagtail Developer, Torchbox",
+            "experiences": [
+              {
+                "title": "Google Summer of Code",
+                "year": 2019,
+                "organization": "Django Software Foundation",
+                "project": "Cross-DB JSONField"
+              }
+            ],
+            "username": "laymonage"
+          }
+        </code></pre>
+        </section>
+      </section>
+      <section>
+        <section data-auto-animate>
+          <h2 class="code">JSONField</h2>
+        </section>
+        <section data-auto-animate>
+          <h2 class="code">JSONField</h2>
+          <p>“A field for storing JSON-encoded data.”</p>
+        </section>
+        <section data-auto-animate>
+          <h2 class="code">JSONField</h2>
+          <p>“A field for storing JSON-encoded data.”</p>
+
+          <p><small>In Python, represented as:</small></p>
+
+          <ul class="compact">
+            <li class="fragment" data-fragment-index="1"><strong><code>dict</code></strong></li>
+            <li class="fragment" data-fragment-index="2"><strong><code>list</code></strong></li>
+            <li class="fragment" data-fragment-index="3"><code>str</code></li>
+            <li class="fragment" data-fragment-index="3"><code>int</code></li>
+            <li class="fragment" data-fragment-index="3"><code>float</code></li>
+            <li class="fragment" data-fragment-index="3"><code>bool</code></li>
+            <li class="fragment" data-fragment-index="3"><code>None</code></li>
+          </ul>
+        </section>
+      </section>
+      <section>
+        <section data-auto-animate>
+          <h2>JSON<span data-id="encoded" style="font-size: inherit;">-encoded</span> data</h2>
+        </section>
+        <section data-auto-animate>
+          <h2>JSON<span data-id="encoded" style="font-size: 0;">-encoded</span> data</h2>
+
+          <pre data-id="code"><code data-line-numbers="1-10|2|3|4|5|6-9|7-8" data-trim>
+            {
+              "name": "Sage",
+              "active": true,
+              "age": 22,
+              "height": 170.0,
+              "interests": [
+                {"hobbies": ["reading", "coding"]},
+                {"others": ["cats", 42]}
+              ]
+            }
+          </code></pre>
+        </section>
+        <section data-auto-animate>
+          <h2>JSON<span data-id="encoded" style="font-size: 0;">-encoded</span> data</h2>
+
+          <pre data-id="code"><code data-line-numbers="10|1-11" data-trim>
+            {
+              "name": "Sage",
+              "active": true,
+              "age": 22,
+              "height": 170.0,
+              "interests": [
+                {"hobbies": ["reading", "coding"]},
+                {"others": ["cats", 42]}
+              ],
+              "partner": null
+            }
+          </code></pre>
+        </section>
+        <section data-auto-animate>
+          <h2>JSON<span data-id="encoded" style="color:deepskyblue; font-size: inherit;">-encoded</span> data</h2>
+
+          <pre data-id="code"><code data-line-numbers data-trim class="python">
+            # This is in Python
+            data = '''{
+              "name": "Sage",
+              "active": true,
+              "age": 22,
+              "height": 170.0,
+              "interests": [
+                {"hobbies": ["reading", "coding"]},
+                {"others": ["cats", 42]}
+              ],
+              "partner": null
+            }'''
+          </code></pre>
+        </section>
+      </section>
+      <section>
+        <section data-auto-animate>
+          <h2>Databases</h2>
+        </section>
+        <section data-auto-animate>
+          <h2>Databases</h2>
+
+          <pre data-id="code" style="font-size: 1.3rem;"><code data-line-numbers data-trim class="python">
+              class Profile(models.Model):
+                  user = models.OneToOneField(User, on_delete=models.CASCADE)
+                  status = models.CharField(max_length=255)
+                  last_sync = models.DateTimeField(auto_now=True)
+                  config = models.JSONField()
+            </code></pre>
+        </section>
+        <section data-auto-animate>
+          <h2>
+            Databases
+          </h2>
+
+          <table class="code" style="font-size: 1.35rem;">
+            <thead>
+              <tr>
+                <th colspan="4">myapp_profile</th>
+              </tr>
+              <tr>
+                <th>user_id</th>
+                <th>status</th>
+                <th>last_sync</th>
+                <th>config</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>32</td>
+                <td>Happy!</td>
+                <td>2020-08-17T19:45:05.481516</td>
+                <td>
+                  <pre style="width: 100%;"><code data-trim>
+                    {
+                      "dark_mode": true,
+                      "font_size": 1,
+                      "color_scheme": "blue"
+                    }</pre></code>
+                </td>
+              </tr>
+              <tr>
+                <td>97</td>
+                <td>Bored...</td>
+                <td>2020-08-15T12:34:56.123456</td>
+                <td>
+                  <pre style="width: 100%;"><code data-trim>
+                    {
+                      "dark_mode": false,
+                      "font_size": 3,
+                      "color_scheme": "red"
+                    }</pre></code>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+        <section data-auto-animate>
+          <h2>
+            JSON in (SQL) Databases
+          </h2>
+
+          <table class="code" style="font-size: 1.2rem;">
+            <thead>
+              <tr>
+                <th colspan="4">myapp_profile</th>
+              </tr>
+              <tr>
+                <th>user_id</th>
+                <th>status</th>
+                <th>last_sync</th>
+                <th>config</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>32</td>
+                <td>Happy!</td>
+                <td>2020-08-17T 19:45:05.481516</td>
+                <td>{"dark_mode": true, "font_size": 1, "color_scheme": "blue"}</td>
+              </tr>
+              <tr>
+                <td>97</td>
+                <td>Bored...</td>
+                <td>2020-08-15T 12:34:56.123456</td>
+                <td>{"dark_mode": false, "font_size": 3, "color_scheme": "red"}</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+      </section>
+      <section>
+        <section data-auto-animate>
+          <h2><code>JSONField</code></h2>
+        </section>
+        <section data-auto-animate>
+          <h2><code>JSONField</code></h2>
+          <p>How does it work?</p>
+        </section>
+        <section data-auto-animate>
+          <h2><code>JSONField</code></h2>
+          <p>How does it work?</p>
+
+          <pre data-id="code-model" style="font-size: 1.25rem;"><code data-line-numbers data-trim class="python">
+            class Profile(models.Model):
+                ...
+                config = models.JSONField()
+          </code></pre>
+        </section>
+        <section data-auto-animate>
+          <h2><code>JSONField</code></h2>
+          <p data-id="how">How does it work?</p>
+
+          <pre data-id="code-model" style="font-size: 1.25rem;"><code data-line-numbers data-trim class="python">
+            class Profile(models.Model):
+                ...
+                config = models.JSONField()
+          </code></pre>
+
+          <pre data-id="code-shell" style="font-size: 1.15rem;"><code data-line-numbers="1|2|3|4|5-6" data-trim class="python">
+            >>> config = {'dark_mode': True, 'font_size': 2, 'color_scheme': 'pink'}
+            >>> profile = Profile.objects.create(config=config)
+            >>> # Some time later...
+            >>> saved_profile = Profile.objects.get(id=profile.id)
+            >>> saved_profile.config == config
+            True
+          </code></pre>
+        </section>
+        <section data-auto-animate>
+          <h2><code>JSONField</code></h2>
+          <p data-id="how">How does it work<span data-id="background" style="font-size: 0;">... in the
+              background</span>?</p>
+
+          <pre data-id="code-shell" style="font-size: 1.15rem;"><code data-line-numbers="7-8|9|10|11-12" data-trim class="python">
+            >>> config = {'dark_mode': True, 'font_size': 2, 'color_scheme': 'pink'}
+            >>> profile = Profile.objects.create(config=config)
+            >>> # Some time later...
+            >>> saved_profile = Profile.objects.get(id=profile.id)
+            >>> saved_profile.config == config
+            True
+            >>> saved_profile.config
+            {'dark_mode': True, 'font_size': 2, 'color_scheme': 'pink'}
+            >>> saved_profile.config['font_size'] = 3
+            >>> saved_profile.save()
+            >>> Profile.objects.get(id=saved_profile.id).config['font_size']
+            3
+          </code></pre>
+        </section>
+      </section>
+      <section>
+        <section data-auto-animate>
+          <h2><code>JSONField</code></h2>
+          <p data-id="how">How does it work<span data-id="background" style="font-size: inherit;">... in the
+              background</span>?</p>
+
+          <pre data-id="code-shell" style="font-size: 1.15rem;"><code data-line-numbers="11-12" data-trim class="python">
+            >>> config = {'dark_mode': True, 'font_size': 2, 'color_scheme': 'pink'}
+            >>> profile = Profile.objects.create(config=config)
+            >>> # Some time later...
+            >>> saved_profile = Profile.objects.get(id=profile.id)
+            >>> saved_profile.config == config
+            True
+            >>> saved_profile.config
+            {'dark_mode': True, 'font_size': 2, 'color_scheme': 'pink'}
+            >>> saved_profile.config['font_size'] = 3
+            >>> saved_profile.save()
+            >>> Profile.objects.get(id=saved_profile.id).config['font_size']
+            3
+          </code></pre>
+        </section>
+        <section data-auto-animate>
+          <h2><code>JSONField</code></h2>
+          <p data-id="how">How does it work<span data-id="background" style="font-size: inherit;">... in the
+              background</span>?</p>
+
+          <pre data-id="code-shell" style="font-size: 1.15rem;"><code data-line-numbers="1|2" data-trim class="python">
+            >>> config = {'dark_mode': True, 'font_size': 2, 'color_scheme': 'pink'}
+            >>> profile = Profile.objects.create(config=config)
+            >>> # Some time later...
+            >>> saved_profile = Profile.objects.get(id=profile.id)
+            >>> saved_profile.config
+            {'dark_mode': True, 'font_size': 2, 'color_scheme': 'pink'}
+          </code></pre>
+        </section>
+        <section data-auto-animate>
+          <h2><code>JSONField</code></h2>
+          <p data-id="how">How does it work<span data-id="background" style="font-size: inherit;">... in the
+              background</span>?</p>
+
+          <pre data-id="code-shell" style="font-size: 1.15rem;"><code data-line-numbers="2-3|2|3" data-trim class="python">
+            >>> config = {'dark_mode': True, 'font_size': 2, 'color_scheme': 'pink'}
+            >>> profile = Profile(config=config)
+            >>> profile.save()
+            >>> # Some time later...
+            >>> saved_profile = Profile.objects.get(id=profile.id)
+            >>> saved_profile.config
+            {'dark_mode': True, 'font_size': 2, 'color_scheme': 'pink'}
+          </code></pre>
+        </section>
+        <section data-auto-animate>
+          <h2><code>JSONField</code></h2>
+          <p data-id="how">How does it work<span data-id="background" style="font-size: inherit;">... in the
+              background</span>?</p>
+
+          <pre data-id="code-shell" style="font-size: 1.15rem;"><code data-line-numbers="4-5" data-trim class="python">
+            >>> config = {'dark_mode': True, 'font_size': 2, 'color_scheme': 'pink'}
+            >>> profile = Profile(config=config)
+            >>> profile.save()
+            >>> # Turn the config into JSON-encoded data!
+            >>> '{"dark_mode": true, "font_size": 2, "color_scheme": "pink"}'
+            >>> saved_profile = Profile.objects.get(id=profile.id)
+            >>> saved_profile.config
+            {'dark_mode': True, 'font_size': 2, 'color_scheme': 'pink'}
+          </code></pre>
+        </section>
+        <section data-auto-animate>
+          <h2><code>JSONField</code></h2>
+          <p data-id="how">How does it work<span data-id="background" style="font-size: inherit;">... in the
+              background</span>?</p>
+
+          <pre data-id="code-shell" style="font-size: 1.15rem;"><code data-line-numbers="6-10|11" data-trim class="python">
+            >>> config = {'dark_mode': True, 'font_size': 2, 'color_scheme': 'pink'}
+            >>> profile = Profile(config=config)
+            >>> profile.save()
+            >>> # Turn the config into JSON-encoded data!
+            >>> '{"dark_mode": true, "font_size": 2, "color_scheme": "pink"}'
+            >>> # Eventually, it will be:
+            >>> """
+            INSERT INTO myapp_profile
+            VALUES (42, '{"dark_mode": true, "font_size": 2, "color_scheme": "pink"}')
+            """
+            >>> saved_profile = Profile.objects.get(id=profile.id)
+            >>> saved_profile.config
+            {'dark_mode': True, 'font_size': 2, 'color_scheme': 'pink'}
+          </code></pre>
+        </section>
+        <section data-auto-animate>
+          <h2><code>JSONField</code></h2>
+          <p data-id="how">How does it work<span data-id="background" style="font-size: inherit;">... in the
+              background</span>?</p>
+
+          <pre data-id="code-shell" style="font-size: 1.15rem;"><code data-line-numbers="12" data-trim class="python">
+            >>> config = {'dark_mode': True, 'font_size': 2, 'color_scheme': 'pink'}
+            >>> profile = Profile(config=config)
+            >>> profile.save()
+            >>> # Turn the config into JSON-encoded data!
+            >>> '{"dark_mode": true, "font_size": 2, "color_scheme": "pink"}'
+            >>> # Eventually, it will be:
+            >>> """
+            INSERT INTO myapp_profile
+            VALUES (42, '{"dark_mode": true, "font_size": 2, "color_scheme": "pink"}')
+            """
+            >>> saved_profile = Profile.objects.get(id=profile.id)
+            >>> """SELECT id, config FROM myapp_profile WHERE id = 42"""
+            >>> saved_profile.config
+            {'dark_mode': True, 'font_size': 2, 'color_scheme': 'pink'}
+          </code></pre>
+        </section>
+        <section data-auto-animate>
+          <h2><code>JSONField</code></h2>
+          <p data-id="how">How does it work<span data-id="background" style="font-size: inherit;">... in the
+              background</span>?</p>
+
+          <pre data-id="code-shell" style="font-size: 1.15rem;"><code data-line-numbers="13|13-15" data-trim class="python">
+            >>> config = {'dark_mode': True, 'font_size': 2, 'color_scheme': 'pink'}
+            >>> profile = Profile(config=config)
+            >>> profile.save()
+            >>> # Turn the config into JSON-encoded data!
+            >>> '{"dark_mode": true, "font_size": 2, "color_scheme": "pink"}'
+            >>> # Eventually, it will be:
+            >>> """
+            INSERT INTO myapp_profile
+            VALUES (42, '{"dark_mode": true, "font_size": 2, "color_scheme": "pink"}')
+            """
+            >>> saved_profile = Profile.objects.get(id=profile.id)
+            >>> """SELECT id, config FROM myapp_profile WHERE id = 42"""
+            >>> '{"dark_mode": true, "font_size": 2, "color_scheme": "pink"}'
+            >>> saved_profile.config
+            {'dark_mode': True, 'font_size': 2, 'color_scheme': 'pink'}
+          </code></pre>
+        </section>
+      </section>
+      <section>
+        <section data-auto-animate>
+          <h2>Python's <code>json</code> library</h2>
+        </section>
+        <section data-auto-animate>
+          <h2>Python's <code>json</code> library</h2>
+
+          <pre data-id="code-shell" style="font-size: 1.15rem;"><code data-line-numbers="1|2|3|4-5|6|7-8|9-10" data-trim class="python">
+            >>> import json
+            >>> config = {'dark_mode': True, 'font_size': 2, 'color_scheme': 'pink'}
+            >>> encoded = json.dumps(config)
+            >>> encoded
+            '{"dark_mode": true, "font_size": 2, "color_scheme": "pink"}'
+            >>> decoded = json.loads(encoded)
+            >>> decoded
+            {'dark_mode': True, 'font_size': 2, 'color_scheme': 'pink'}
+            >>> decoded == config
+            True
+          </code></pre>
+        </section>
+      </section>
+      <section>
+        <section data-auto-animate>
+          <h2>Transforms and Lookups</h2>
+        </section>
+        <section data-auto-animate>
+          <h2>Transforms and Lookups</h2>
+
+          <pre><code data-trim class="json">
+            {
+              "name": "Sage",
+              "age": 22
+            }
+          </code></pre>
+
+          <pre><code data-trim class="fragment python">
+            >>> MyModel.objects.filter(some_json_field__name='Sage')
+          </code></pre>
+        </section>
+        <section data-auto-animate>
+          <h2>Transforms and Lookups</h2>
+
+          <pre><code data-trim class="json">
+            {
+              "name": "Sage",
+              "age": 22
+            }
+          </code></pre>
+
+          <pre><code data-trim class="fragment json">
+            {
+              "name": "Sage",
+              "age": 22,
+              "partner": null
+            }
+          </code></pre>
+
+          <pre><code data-trim class="fragment python">
+            >>> MyModel.objects.filter(
+                    some_json_field__partner__isnull=True)
+          </code></pre>
+
+          <pre><code data-trim class="fragment python">
+            >>> MyModel.objects.filter(
+                    some_json_field__partner=None)
+          </code></pre>
+        </section>
+        <section data-auto-animate>
+          <h2>Transforms and Lookups</h2>
+          <p>Containment</p>
+          <pre><code data-trim class="json">
+            {
+              "name": "Sage",
+              "age": 22,
+              "pets": [
+                {"name": "Bagol", "species": "cat"},
+                {"name": "Foxy", "species": "fox"}
+              ]
+            }
+          </code></pre>
+
+          <pre><code data-trim class="python">
+            >>> MyModel.objects.filter(
+                    some_json_field__contains={
+                        "age": 22,
+                        "pets": [{"species": "cat"}]
+                    }
+                )
+          </code></pre>
+        </section>
+        <section data-auto-animate>
+          <h2>Transforms and Lookups</h2>
+          <p>Containment</p>
+          <pre><code data-trim class="json">
+            {
+              "name": "Sage",
+              "age": 22
+            }
+          </code></pre>
+
+          <pre><code data-trim class="python">
+            >>> MyModel.objects.filter(
+                    some_json_field__contained_by={
+                        "age": 22,
+                        "name": "Sage",
+                        "pets": [
+                          {"name": "Bagol", "species": "cat"},
+                          {"name": "Foxy", "species": "fox"}
+                        ]
+                    }
+                )
+          </code></pre>
+        </section>
+        <section data-auto-animate>
+          <h2>Transforms and Lookups</h2>
+          <p>Key existence</p>
+
+          <pre><code data-trim class="python">
+            >>> MyModel.objects.filter(some_json_field__has_key='pets')
+          </code></pre>
+
+          <pre><code data-trim class="python">
+            >>> MyModel.objects.filter(
+                    some_json_field__has_keys=['pets', 'age'])
+          </code></pre>
+
+          <pre><code data-trim class="python">
+            >>> MyModel.objects.filter(
+                    some_json_field__has_any_keys=['pets', 'age'])
+          </code></pre>
+        </section>
+      </section>
+      <section>
+        <section data-auto-animate>
+          <h2>Where to go from here?</h2>
+        </section>
+        <section data-auto-animate>
+          <h2>Where to go from here?</h2>
+          <ul class="compact">
+            <li><a href="https://github.com/wagtail/wagtail/pull/8021">https://github.com/wagtail/wagtail/pull/8021</a>
+            </li>
+            <li class="fragment"><a
+                href="https://github.com/wagtail/wagtail/pull/8024">https://github.com/wagtail/wagtail/pull/8024</a>
+            </li>
+            <li class="fragment"><a
+                href="https://github.com/wagtail/wagtail/pull/8039">https://github.com/wagtail/wagtail/pull/8039</a>
+            </li>
+          </ul>
+        </section>
+      </section>
+      <section>
+        <section data-auto-animate>
+          <h1>Thank you!</h1>
+        </section>
+        <section data-auto-animate>
+          <h1>Thank you!</h1>
+          <pre class="hljs" style="font-size: 1.25rem;">{
+  "name": "Sage Abdullah",
+  "username": "laymonage",
+  "slides": {
+    "hosted": "<a href="https://slides.laymonage.com/wagtail-jsonfield">https://slides.laymonage.com/wagtail-jsonfield</a>",
+    "source": "<a href="https://github.com/laymonage/slides-wagtail-jsonfield">https://github.com/laymonage/slides-wagtail-jsonfield</a>"
+  }
+}</pre>
+        </section>
+        <section data-auto-animate data-background-image="assets/bagol.jpg">
+        </section>
+        <section>
+          <h2>Image sources</h2>
+          <ul style="font-size: 0.75em;">
+            <li>
+              -
+            </li>
+          </ul>
+        </section>
+      </section>
+    </div>
+  </div>
+
+  <script src="dist/reveal.js"></script>
+  <script src="plugin/notes/notes.js"></script>
+  <script src="plugin/markdown/markdown.js"></script>
+  <script src="plugin/highlight/highlight.js"></script>
+  <script>
+    // More info about initialization & config:
+    // - https://revealjs.com/initialization/
+    // - https://revealjs.com/config/
+    Reveal.initialize({
+      hash: true,
+
+      // Learn about plugins: https://revealjs.com/plugins/
+      plugins: [RevealMarkdown, RevealHighlight, RevealNotes]
+    });
+  </script>
 </body>
 
 </html>
