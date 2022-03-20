@@ -275,7 +275,7 @@ gulp.task('package', gulp.series('default', () =>
         './index.html',
         './dist/**',
         './lib/**',
-        './images/**',
+        './assets/**',
         './plugin/**',
         './**.md'
     ]).pipe(zip('reveal-js-presentation.zip')).pipe(gulp.dest('./'))
