@@ -548,19 +548,324 @@
       </section>
       <section>
         <section data-auto-animate>
-          <h2>Where to go from here?</h2>
+          <h2>How does this fit into Wagtail?</h2>
+        </section>
+      </section>
+      <section>
+        <section data-auto-animate>
+          <h2>The easy wins</h2>
         </section>
         <section data-auto-animate>
-          <h2>Where to go from here?</h2>
+          <h2><code>PageRevision</code></h2>
+          <img src="assets/wagtail_PageRevision.png" alt="Wagtail's PageRevision model reference" />
+          <a style="font-size: 1rem;"
+            href="https://docs.wagtail.org/en/2.16.1/reference/pages/model_reference.html">docs.wagtail.org/en/2.16.1/reference/pages/model_reference.html</a>
+        </section>
+        <section data-auto-animate>
+          <h2><code>PageRevision</code></h2>
+          <pre data-id="page-revision-model"><code data-trim class="python" data-line-numbers="1-6|3">
+            class PageRevision(models.Model):
+                ...
+                content_json = models.TextField(
+                    verbose_name=_("content JSON")
+                )
+                ...
+          </code></pre>
+        </section>
+        <section data-auto-animate>
+          <h2><code>PageRevision</code></h2>
+          <pre data-id="page-revision-model"><code data-trim class="python" data-line-numbers="3">
+            class PageRevision(models.Model):
+                ...
+                content_json = models.JSONField(
+                    verbose_name=_("content JSON")
+                )
+                ...
+          </code></pre>
+        </section>
+        <section data-auto-animate>
+          <h2><code>PageRevision</code></h2>
+          <pre data-id="page-revision-model"><code data-trim class="python" data-line-numbers="3">
+            class PageRevision(models.Model):
+                ...
+                content = models.JSONField(
+                    verbose_name=_("content JSON")
+                )
+                ...
+          </code></pre>
+        </section>
+        <section data-auto-animate>
+          <h2><code>PageRevision</code></h2>
+          <pre data-id="page-revision-model"><code data-trim class="python" data-line-numbers="5|1-7">
+            class PageRevision(models.Model):
+                ...
+                content = models.JSONField(
+                    verbose_name=_("content JSON"),
+                    encoder=DjangoJSONEncoder
+                )
+                ...
+          </code></pre>
+        </section>
+        <section data-auto-animate>
+          <h2><code>PageRevision</code></h2>
+          <img style="margin-bottom: 0;" width="640" src="assets/wagtail_PageRevision_diff.png"
+            alt="PageRevision PR diff sample" />
+          <div style="line-height: 1rem;">
+            <a style="font-size: 1rem;" href="https://github.com/wagtail/wagtail/pull/8024">wagtail/wagtail#8024</a>
+          </div>
+        </section>
+        <section data-auto-animate>
+          <h2><code>BaseLogEntry</code></h2>
+          <img width="640" src="assets/wagtail_LogEntry.png"
+            alt="Wagtail's BaseLogEntry and PageLogEntry model reference" />
+          <a style="font-size: 1rem;"
+            href="https://docs.wagtail.org/en/2.16.1/reference/pages/model_reference.html">docs.wagtail.org/en/2.16.1/reference/pages/model_reference.html</a>
+        </section>
+        <section data-auto-animate>
+          <h2><code>BaseLogEntry</code></h2>
+          <pre data-id="base-log-entry-model"><code data-trim class="python" data-line-numbers="1-4|3">
+            class BaseLogEntry(models.Model):
+                ...
+                data_json = models.TextField(blank=True)
+                ...
+          </code></pre>
+        </section>
+        <section data-auto-animate>
+          <h2><code>BaseLogEntry</code></h2>
+          <pre data-id="base-log-entry-model"><code data-trim class="python" data-line-numbers="3">
+            class BaseLogEntry(models.Model):
+                ...
+                data = models.JSONField(blank=True)
+                ...
+          </code></pre>
+        </section>
+        <section data-auto-animate>
+          <h2><code>BaseLogEntry</code></h2>
+          <pre data-id="base-log-entry-model"><code data-trim class="python" data-line-numbers="3">
+            class BaseLogEntry(models.Model):
+                ...
+                data = models.JSONField(blank=True, default=dict)
+                ...
+          </code></pre>
+        </section>
+        <section data-auto-animate>
+          <h2><code>BaseLogEntry</code></h2>
+          <img style="margin-bottom: 0;" width="500" src="assets/wagtail_LogEntry_diff.png"
+            alt="BaseLogEntry PR diff sample" />
+          <div style="line-height: 1rem;">
+            <a style="font-size: 1rem;" href="https://github.com/wagtail/wagtail/pull/8021">wagtail/wagtail#8021</a>
+          </div>
+        </section>
+        <section data-auto-animate>
+          <h2><code>BaseLogEntry</code></h2>
+          <img style="margin-bottom: 0;" width="640" src="assets/wagtail_LogEntry_issue.png"
+            alt="Issue #6942 on Wagtail, requesting BaseLogEntry to use JSONField" />
+          <div style="line-height: 1rem;">
+            <a style="font-size: 1rem;" href="https://github.com/wagtail/wagtail/issues/6942">wagtail/wagtail#6942</a>
+          </div>
+        </section>
+      </section>
+      <section data-auto-animate>
+        <section>
+          <h2>The not-so-easy wins</h2>
+        </section>
+        <section data-auto-animate>
+          <h2><code>StreamField</code></h2>
+          <img style="margin-bottom: 0;" width="640" src="assets/wagtail_StreamField_issue.png"
+            alt="Issue #5280 on Wagtail, requesting StreamField to use JSONField" />
+          <div style="line-height: 1rem;">
+            <a style="font-size: 1rem;" href="https://github.com/wagtail/wagtail/issues/5280">wagtail/wagtail#5280</a>
+          </div>
+        </section>
+        <section data-auto-animate>
+          <h2><code>StreamField</code></h2>
+          <img style="margin-bottom: 0;" src="assets/wagtail_StreamField_issue_comment.png"
+            alt="Comment: &quot;I would like to pull this up, since Wagtail 2.16 has dropped Django 3.0 and 3.1 and can now offer JSONField for all supported DBs.&quot;" />
+          <div style="line-height: 1rem;">
+            <a style="font-size: 1rem;"
+              href="https://github.com/wagtail/wagtail/issues/5280#issuecomment-1035126512">wagtail/wagtail#5280
+              (comment)</a>
+          </div>
+        </section>
+        <section data-auto-animate>
+          <h2><code>StreamField</code></h2>
+          <pre data-id="streamfield"><code data-trim class="python" data-line-numbers="1-4">
+            class StreamField(models.Field):
+                ...
+                def get_internal_type(self):
+                    return "TextField"
+          </code></pre>
+          <img class="fragment" data-fragment-index="0" style="margin-bottom: 0;" src="assets/django_emulating_type.png"
+            alt="Django docs: get_internal_type() is useful if the field is similar to some other field." />
+          <div data-id="link" class="fragment" data-fragment-index="0" style="line-height: 1rem;">
+            <a style="font-size: 1rem;"
+              href="https://docs.djangoproject.com/en/stable/howto/custom-model-fields/#emulating-built-in-field-types-1">docs.djangoproject.com/en/stable/howto/custom-model-fields/#emulating-built-in-field-types-1</a>
+          </div>
+        </section>
+        <section data-auto-animate>
+          <h2><code>StreamField</code></h2>
+          <pre data-id="streamfield"><code data-trim class="python" data-line-numbers="1-4">
+            class StreamField(models.Field):
+                ...
+                def get_internal_type(self):
+                    return "JSONField"
+          </code></pre>
+          <img style="margin-bottom: 0;" src="assets/django_emulating_type.png"
+            alt="Django docs: get_internal_type() is useful if the field is similar to some other field." />
+          <div data-id="link" style="line-height: 1rem;">
+            <a style="font-size: 1rem;"
+              href="https://docs.djangoproject.com/en/stable/howto/custom-model-fields/#emulating-built-in-field-types-1">docs.djangoproject.com/en/stable/howto/custom-model-fields/#emulating-built-in-field-types-1</a>
+          </div>
+        </section>
+        <section data-auto-animate>
+          <h2><code>StreamField</code></h2>
+          <pre data-id="streamfield"><code data-trim class="python" data-line-numbers="1-4">
+            class StreamField(models.Field):
+                ...
+                def get_internal_type(self):
+                    return "JSONField"  # Doesn't work! 😢
+          </code></pre>
+          <img style="margin-bottom: 0;" src="assets/django_emulating_type.png"
+            alt="Django docs: get_internal_type() is useful if the field is similar to some other field." />
+          <div data-id="link" style="line-height: 1rem;">
+            <a style="font-size: 1rem;"
+              href="https://docs.djangoproject.com/en/stable/howto/custom-model-fields/#emulating-built-in-field-types-1">docs.djangoproject.com/en/stable/howto/custom-model-fields/#emulating-built-in-field-types-1</a>
+          </div>
+        </section>
+        <section data-auto-animate>
+          <h2>The problem</h2>
+        </section>
+        <section data-auto-animate>
+          <h2>The problem</h2>
+          <img width="500" style="margin-bottom: 0;" src="assets/django_change_base.png"
+            alt="Django docs: You can’t change the base class of a custom field because Django won’t detect the change and make a migration for it." />
+          <div data-id="link" style="line-height: 1rem;">
+            <a style="font-size: 1rem;"
+              href="https://docs.djangoproject.com/en/stable/howto/custom-model-fields/#changing-a-custom-field-s-base-class">docs.djangoproject.com/en/stable/howto/custom-model-fields/#changing-a-custom-field-s-base-class</a>
+          </div>
+        </section>
+        <section data-auto-animate>
+          <h2>The solution</h2>
+        </section>
+        <section data-auto-animate>
+          <h2>The solution</h2>
+          <p><span data-id="jsonstreamfield"><code>JSONStreamField</code>?</span> 🤔</p>
+        </section>
+        <section data-auto-animate>
+          <h2>The solution</h2>
+          <p><span data-id="jsonstreamfield"><code>JSONStreamField</code>?</span> ❎</p>
+          <p><code>use_json_field</code> ✅</p>
+        </section>
+        <section data-auto-animate>
+          <h2>The solution</h2>
+          <pre style="font-size: 1.25rem;" data-id="streamfield"><code data-trim class="python" data-line-numbers="1-11|2,4|7-11|10">
+            class StreamField(models.Field):
+                def __init__(self, block_types, use_json_field=None, **kwargs):
+                    ...
+                    self.use_json_field = use_json_field
+                    ...
+
+                def deconstruct(self):
+                    name, path, _, kwargs = super().deconstruct()
+                    ...
+                    kwargs["use_json_field"] = self.use_json_field
+                    return name, path, args, kwargs
+          </code></pre>
+        </section>
+        <section data-auto-animate>
+          <h2>The solution</h2>
+          <pre style="font-size: 1.25rem;" data-id="streamfield"><code data-trim class="python" data-line-numbers="1-4|3-4">
+            class StreamField(models.Field):
+                ...
+                def get_internal_type(self):
+                    return "JSONField" if self.use_json_field else "TextField"
+          </code></pre>
+        </section>
+        <section data-auto-animate>
+          <h2>The solution</h2>
+          <pre style="font-size: 1.25rem;" data-id="streamfield"><code data-trim class="python" data-line-numbers="1-11|3-6,8-11|4-5,9-10">
+            class StreamField(models.Field):
+                ...
+                def get_lookup(self, lookup_name):
+                    if self.use_json_field:
+                        return models.JSONField().get_lookup(lookup_name)
+                    return super().get_lookup(lookup_name)
+
+                def get_transform(self, lookup_name):
+                    if self.use_json_field:
+                        return models.JSONField().get_transform(lookup_name)
+                    return super().get_transform(lookup_name)
+          </code></pre>
+        </section>
+        <section data-auto-animate>
+          <h2>The solution</h2>
+          <pre style="font-size: 1.25rem;" data-id="streamfield"><code data-trim class="python" data-line-numbers="3-5|3-5,9,14">
+            class StreamField(models.Field):
+                ...
+                @property
+                def json_field(self):
+                    return models.JSONField(encoder=DjangoJSONEncoder)
+
+                def get_lookup(self, lookup_name):
+                    if self.use_json_field:
+                        return self.json_field.get_lookup(lookup_name)
+                    return super().get_lookup(lookup_name)
+
+                def get_transform(self, lookup_name):
+                    if self.use_json_field:
+                        return self.json_field.get_transform(lookup_name)
+                    return super().get_transform(lookup_name)
+          </code></pre>
+        </section>
+        <section data-auto-animate>
+          <h2>The solution</h2>
+          <pre style="font-size: 1.2rem;" data-id="streamfield"><code data-trim class="python" data-line-numbers="1-16|5,8-16">
+            class StreamField(models.Field):
+                def __init__(self, block_types, use_json_field=None, **kwargs):
+                    ...
+                    self.use_json_field = use_json_field
+                    self._check_json_field()
+                    ...
+
+                def _check_json_field(self):
+                    if type(self.use_json_field) is not bool:
+                        warnings.warn(
+                            "StreamField must explicitly set use_json_field "
+                            "argument to True/False instead of "
+                            f"{self.use_json_field}.",
+                            RemovedInWagtail219Warning,
+                            stacklevel=3,
+                        )
+          </code></pre>
+        </section>
+        <section data-auto-animate>
+          <h2>Where we're at</h2>
+          <img style="margin-bottom: 0;" width="640" src="assets/wagtail_StreamField_pr.png"
+            alt="StreamField PR description" />
+          <div data-id="link" style="line-height: 1rem;">
+            <a style="font-size: 1rem;" href="https://github.com/wagtail/wagtail/pull/8039">wagtail/wagtail#8039</a>
+          </div>
+        </section>
+        <section data-auto-animate>
+          <h2>Where we're at</h2>
+          <img style="margin-bottom: 0;" width="640" src="assets/wagtail_StreamField_tests.png"
+            alt="Tests are passing" />
+          <div data-id="link" style="line-height: 1rem;">
+            <a style="font-size: 1rem;" href="https://github.com/wagtail/wagtail/pull/8039">wagtail/wagtail#8039</a>
+          </div>
+        </section>
+      </section>
+      <section>
+        <section data-auto-animate>
+          <h2>What could this bring?</h2>
+        </section>
+        <section data-auto-animate>
+          <h2>What could this bring?</h2>
           <ul class="compact">
-            <li><a href="https://github.com/wagtail/wagtail/pull/8021">https://github.com/wagtail/wagtail/pull/8021</a>
-            </li>
-            <li class="fragment"><a
-                href="https://github.com/wagtail/wagtail/pull/8024">https://github.com/wagtail/wagtail/pull/8024</a>
-            </li>
-            <li class="fragment"><a
-                href="https://github.com/wagtail/wagtail/pull/8039">https://github.com/wagtail/wagtail/pull/8039</a>
-            </li>
+            <li>Improved read performance*</li>
+            <li class="fragment">Smarter search with lookups and transforms</li>
+            <li class="fragment">New features for <code>StreamField</code>s?</li>
+            <li class="fragment">You tell me 😉</li>
           </ul>
         </section>
       </section>
@@ -576,7 +881,12 @@
   "slides": {
     "hosted": "<a href="https://slides.laymonage.com/wagtail-jsonfield">https://slides.laymonage.com/wagtail-jsonfield</a>",
     "source": "<a href="https://github.com/laymonage/slides-wagtail-jsonfield">https://github.com/laymonage/slides-wagtail-jsonfield</a>"
-  }
+  },
+  "prs": [
+    "<a href="https://github.com/wagtail/wagtail/pull/8021">https://github.com/wagtail/wagtail/pull/8021</a>",
+    "<a href="https://github.com/wagtail/wagtail/pull/8024">https://github.com/wagtail/wagtail/pull/8024</a>",
+    "<a href="https://github.com/wagtail/wagtail/pull/8039">https://github.com/wagtail/wagtail/pull/8039</a>"
+  ]
 }</pre>
         </section>
         <section data-auto-animate data-background-image="assets/bagol.jpg">

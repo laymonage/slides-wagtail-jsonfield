@@ -84,10 +84,22 @@ section {
       .fragment.fade-in:not(.visible) {
         font-size: 0;
       }
+      h2 {
+        code {
+          letter-spacing: -3px;
+        }
+      }
     }
 
     .code {
       font-family: $codeFont;
+    }
+
+    ::selection {
+      background: rgba(255, 255, 255, 0.25); /* WebKit/Blink Browsers */
+    }
+    ::-moz-selection {
+      background: rgba(255, 255, 255, 0.25); /* Gecko Browsers */
     }
   }
 }

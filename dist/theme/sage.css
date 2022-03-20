@@ -388,8 +388,19 @@ section ol {
 .reveal .slides section .fragment.fade-in:not(.visible) {
   font-size: 0;
 }
+.reveal .slides section h2 code {
+  letter-spacing: -3px;
+}
 .reveal .slides .code {
   font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+}
+.reveal .slides ::selection {
+  background: rgba(255, 255, 255, 0.25);
+  /* WebKit/Blink Browsers */
+}
+.reveal .slides ::-moz-selection {
+  background: rgba(255, 255, 255, 0.25);
+  /* Gecko Browsers */
 }
 
 table.center th,
